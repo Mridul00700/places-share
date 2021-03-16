@@ -12,6 +12,8 @@ const PlaceList = (props) => {
       </div>
     );
   }
+
+  return <ul className="place-list"></ul>;
 };
 
 export default PlaceList;
