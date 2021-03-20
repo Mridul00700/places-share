@@ -11,8 +11,8 @@ const DummyPlaces = [
         imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/375px-Empire_State_Building_%28aerial_view%29.jpg',
         address: '20 W 34th St, New York, NY 10001, United States',
         location: {
-            lat: 36.6355333,
-            lng: -75.1263605
+            lat: 40.748817,
+            lng: -73.985428
         },
         creator: 'u1'
     },
