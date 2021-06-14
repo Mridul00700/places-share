@@ -1,4 +1,4 @@
-import Input from "";
+// import Input from "";
 const NewPlace = () => {
   return (
     <form className="place-form">
