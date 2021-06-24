@@ -1,8 +1,9 @@
 // import Input from "";
 import { useCallback, useReducer } from "react";
 import Input from "../../shared/components/FormElements/Input";
+import Button from "../../shared/components/FormElements/Button";
 import {
-  VALIDATOR_MIN,
+  VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../shared/components/Util/validators";
 import "./NewPlace.css";
@@ -22,7 +23,7 @@ const formReducer = (state, action) => {
         ...state,
         inputs: {
           ...state.inputs,
-          [action.inputID]: { value: action.value, isValid: action.isValid },
+          [action.inputId]: { value: action.value, isValid: action.isValid },
         },
         isValid: formIsValid,
       };
@@ -70,10 +71,13 @@ const NewPlace = () => {
         id="description"
         element="textarea"
         label="Description"
-        validators={[VALIDATOR_MIN(5)]}
+        validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="Please enter a valid description (atleast 5 characters)"
         onInput={inputHandler}
       />
+      <Button type="submit" disabled={!formState.isValid}>
+        ADD PLACE
+      </Button>
     </form>
   );
 };
