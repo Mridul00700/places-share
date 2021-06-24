@@ -1,5 +1,5 @@
 // import Input from "";
-import { useCallback } from "react";
+import { useCallback, useReducer } from "react";
 import Input from "../../shared/components/FormElements/Input";
 import {
   VALIDATOR_MIN,
@@ -7,9 +7,53 @@ import {
 } from "../../shared/components/Util/validators";
 import "./NewPlace.css";
 
+const formReducer = (state, action) => {
+  switch (action.type) {
+    case "INPUT_CHANGE":
+      let formIsValid = true;
+      for (const input in state.inputs) {
+        if (input === action.inputId) {
+          formIsValid = formIsValid && action.isValid;
+        } else {
+          formIsValid = formIsValid && state.inputs[input].isValid;
+        }
+      }
+      return {
+        ...state,
+        inputs: {
+          ...state.inputs,
+          [action.inputID]: { value: action.value, isValid: action.isValid },
+        },
+        isValid: formIsValid,
+      };
+    default:
+      return state;
+  }
+};
+
 const NewPlace = () => {
-  const titleInputHandler = useCallback((id, valid, isValid) => {}, []);
-  const descriptionInputHandler = useCallback((id, valid, isValid) => {}, []);
+  const [formState, dispatch] = useReducer(formReducer, {
+    inputs: {
+      title: {
+        value: "",
+        isValid: false,
+      },
+      description: {
+        value: "",
+        isValid: false,
+      },
+    },
+    isValid: false,
+  });
+
+  const inputHandler = useCallback((id, value, isValid) => {
+    dispatch({
+      type: "INPUT_CHANGE",
+      value: value,
+      inputId: id,
+      isValid: isValid,
+    });
+  }, []);
 
   return (
     <form className="place-form">
@@ -20,7 +64,7 @@ const NewPlace = () => {
         label="Title"
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid title"
-        onInput={titleInputHandler}
+        onInput={inputHandler}
       />
       <Input
         id="description"
@@ -28,7 +72,7 @@ const NewPlace = () => {
         label="Description"
         validators={[VALIDATOR_MIN(5)]}
         errorText="Please enter a valid description (atleast 5 characters)"
-        onInput={descriptionInputHandler}
+        onInput={inputHandler}
       />
     </form>
   );
