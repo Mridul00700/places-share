@@ -42,12 +42,33 @@ const UpdatePlace = () => {
     if (!identifiedPlace) {
         return (
             <div className="center">
-                <h2>Could Not find place!</h2>
+                <h2>Could Not find the place!</h2>
             </div>)
     }
 
     return <form>
-        <Input id='title' element="input" type="text" label="Title" validators={[]} />
+        <Input id='title'
+            element="input"
+            type="text"
+            label="Title"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Please enter a valid title."
+            onInput={() => { }}
+            value={identifiedPlace.title}
+            valid={true}
+        />
+        <Input id='description'
+            element="text"
+            label="Description"
+            validators={[VALIDATOR_MINLENGTH(5)]}
+            errorText="Please enter a valid description. (Minimum 5 characters)"
+            onInput={() => { }}
+            value={identifiedPlace.description}
+            valid={true}
+        />
+        <Button type="submit" disabled={true}>
+            Update Place
+        </Button>
     </form>
 }
 
