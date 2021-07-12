@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../shared/components/Util/validators';
+import './PlaceForm.css';
 
 const DummyPlaces = [
     {
@@ -35,7 +36,8 @@ const DummyPlaces = [
 
 const UpdatePlace = () => {
 
-    const placeId = useParams.placeId;
+    const placeId = useParams().placeId;
+    // console.log(placeId);
     // const identifiedPlace = DummyPlaces.filter(place => place.id === placeId)
     const identifiedPlace = DummyPlaces.find(place => place.id === placeId);
 
@@ -46,7 +48,7 @@ const UpdatePlace = () => {
             </div>)
     }
 
-    return <form>
+    return <form className="place-form">
         <Input id='title'
             element="input"
             type="text"
