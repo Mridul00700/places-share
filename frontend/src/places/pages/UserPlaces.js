@@ -18,7 +18,7 @@ const DummyPlaces = [
     },
     {
         id: 'p2',
-        title: 'Empire',
+        title: 'Empire2',
         description: 'Skyscraper',
         imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/375px-Empire_State_Building_%28aerial_view%29.jpg',
         address: '20 W 34th St, New York, NY 10001, United States',
