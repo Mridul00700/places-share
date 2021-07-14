@@ -2,12 +2,14 @@ import Input from '../../shared/components/FormElements/Input';
 import { useForm } from '../../shared/hooks/form-hook';
 import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/FormElements/Button';
+import { useState } from 'react';
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../shared/components/Util/validators';
 import './Auth.css';
 const Auth = props => {
 
 
-    const [formState, inputHandler] = useForm({
+    const [isLoginMode, setIsLoginMode] = useState(true);
+    const [formState, inputHandler, setFormData] = useForm({
         email: {
             value: '',
             isValid: false
@@ -23,11 +25,41 @@ const Auth = props => {
         console.log(formState.inputs);
     }
 
+    const switchModeHandler = () => {
+
+        if (!isLoginMode) {
+            setFormData({
+                ...formState.inputs,
+                name: undefined
+            }, formState.inputs.email.isValid && formState.inputs.password.isValid);
+        } else {
+            setFormData({
+                ...formState.inputs,
+                name: {
+                    value: '',
+                    isValid: false
+                }
+            }, false);
+        }
+        setIsLoginMode(prevMode => !prevMode);
+    }
+
     return (
         <Card className="authentication" >
             <h2>Login Required</h2>
             <hr />
             <form onSubmit={submitHandler} >
+                {!isLoginMode && (
+                    <Input
+                        element="input"
+                        id="name"
+                        type="text"
+                        label="Your Name"
+                        validators={[VALIDATOR_REQUIRE()]}
+                        errorText="Please enter a name."
+                        onInput={inputHandler}
+                    />
+                )}
                 <Input
                     id="email"
                     element="input"
@@ -46,8 +78,9 @@ const Auth = props => {
                     errorText="Please enter a valid password (atleast 7 characters)"
                     onInput={inputHandler}
                 />
-                <Button type="submit" disabled={!formState.isValid}>LOGIN</Button>
+                <Button type="submit" disabled={!formState.isValid}>{isLoginMode ? 'LOGIN' : 'SIGNUP'}</Button>
             </form>
+            <Button inverse onClick={switchModeHandler}>SWITCH TO {isLoginMode ? 'SIGNUP' : 'LOGIN'}</Button>
         </Card>
     )
 }
