@@ -17,12 +17,42 @@ const App = () => {
 
   const login = useCallback(() => {
     setIsLoggedIn(true);
-  });
+  }, []);
 
   const logout = useCallback(() => {
     setIsLoggedIn(false);
-  });
+  }, []);
 
+  let routes;
+
+  if (isLoggedIn) {
+    routes = (
+      <Switch>
+        <Route path="/" exact> <Users /></Route>
+        <Route path="/:userId/places" exact>
+          <UserPlaces />
+        </Route>
+        <Route path="/places/new" exact> <NewPlace /></Route>
+        <Route path='/places/:placeId' >
+          <UpdatePlace />
+        </Route>
+        <Redirect to="/" />
+      </Switch>
+    );
+  } else {
+    routes = (
+      <Switch>
+        <Route path="/" exact> <Users /></Route>
+        <Route path="/:userId/places" exact>
+          <UserPlaces />
+        </Route>
+        <Route path="/auth">
+          <Auth />
+        </Route>
+        <Redirect to="/auth" />
+      </Switch>
+    )
+  }
 
   return (
     // Authcontext is an object that coatain react properties called provider property. 
@@ -30,20 +60,7 @@ const App = () => {
       <Router>
         <MainNavigation />
         <main>
-          <Switch>
-            <Route path="/" exact> <Users /></Route>
-            <Route path="/:userId/places" exact>
-              <UserPlaces />
-            </Route>
-            <Route path="/places/new" exact> <NewPlace /></Route>
-            <Route path='/places/:placeId' >
-              <UpdatePlace />
-            </Route>
-            <Route path="/auth">
-              <Auth />
-            </Route>
-            <Redirect to="/" />
-          </Switch>
+          {routes}
         </main>
       </Router>
     </AuthContext.Provider>

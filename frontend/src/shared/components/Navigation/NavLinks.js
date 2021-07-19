@@ -20,9 +20,9 @@ const NavLinks = props => {
         {auth.isLoggedIn && <li>
             <NavLink to="/places/new">ADD PLACE</NavLink>
         </li>}
-        <li>
+        {!auth.isLoggedIn && <li>
             <NavLink to="/auth">AUTHENTICATE</NavLink>
-        </li>
+        </li>}
     </ul>
 
 };
