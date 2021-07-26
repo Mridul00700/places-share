@@ -9,7 +9,7 @@ const app = express();
 
 // Middleware -- on app 
 
-app.use(placeRoutes);
+app.use('/api/places', placeRoutes);  // => /api/places/ ....
 
 
 
