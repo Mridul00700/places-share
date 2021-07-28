@@ -17,11 +17,34 @@ const DUMMY_PLACES = [
 ];
 
 router.get('/:pid', (req, res, next) => {
-    const placeId = req.params.pid //Holds and object provided by express.js {pid: 'p1'}
+    const placeId = req.params.pid;        //Holds and object provided by express.js {pid: 'p1'}
     const place = DUMMY_PLACES.find(p => {
         return p.id === placeId
     });
+
+    if (!place) {
+        const error = new Error('Could not find a place for the provided id.');
+        error.code = 404;
+        throw error
+    }
+
     res.json({ place }); // { place } = {place : place}
+});
+
+
+router.get('/users/:uid', (req, res, next) => {
+    const userId = req.params.uid;
+    const place = DUMMY_PLACES.find(p => {
+        return p.creator === userId
+    });
+
+    if (!place) {
+        const error = new Error('Could not find a place for the provided id.');
+        error.code = 404;
+        next(error);
+    }
+
+    res.json({ place });
 });
 
 module.exports = router;
