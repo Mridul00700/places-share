@@ -41,7 +41,7 @@ router.get('/users/:uid', (req, res, next) => {
     if (!place) {
         const error = new Error('Could not find a place for the provided id.');
         error.code = 404;
-        next(error);
+        return next(error);
     }
 
     res.json({ place });
