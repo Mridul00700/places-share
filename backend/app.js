@@ -9,6 +9,8 @@ const app = express();
 
 // Middleware -- on app 
 
+app.use(bodyParser.json()); // it will catch any json data and convert it to javascript data structures like object.
+
 app.use('/api/places', placeRoutes);  // => /api/places/ ....
 
 app.use((error, req, res, next) => {

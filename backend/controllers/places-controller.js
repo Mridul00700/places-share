@@ -41,7 +41,24 @@ getPlaceByUserId = (req, res, next) => {
     res.json({ place });
 }
 
+createPlace = (req, res, next) => {
+    const { title, description, coordinates, address, creator } = req.body;
+    const createdPlace = {
+        title,
+        description,
+        location: coordinates,
+        address,
+        creator,
+    };
+    DUMMY_PLACES.push(createdPlace);   // unshift (createdPlace)
+    res.status(201).json({ place: createdPlace })  // Success for successfull post 
+
+};
+
+
+
 // module.exports =  just for one function / data
 
 exports.getPlaceById = getPlaceById;
 exports.getPlaceByUserId = getPlaceByUserId;
+exports.createPlace = createPlace;
