@@ -58,6 +58,24 @@ createPlace = (req, res, next) => {
 
 };
 
+updatePlaceById = (req, res, next) => {
+    const { title, description } = req.body;
+    const placeId = req.params.pid;
+
+    const updatedPlace = { ...DUMMY_PLACES.find(place => place.id === placeId) };
+    const placeIndex = DUMMY_PLACES.findIndex(place => place.id === placeId);
+
+    updatedPlace.title = title;
+    updatedPlace.description = description;
+    DUMMY_PLACES[placeIndex] = updatedPlace;
+
+    res.status(200).json({ place: updatedPlace });
+
+}
+
+deletePlace = (req, res, next) => {
+
+};
 
 
 // module.exports =  just for one function / data
@@ -65,3 +83,5 @@ createPlace = (req, res, next) => {
 exports.getPlaceById = getPlaceById;
 exports.getPlaceByUserId = getPlaceByUserId;
 exports.createPlace = createPlace;
+exports.updatePlaceById = updatePlaceById;
+exports.deletePlace = deletePlace;
