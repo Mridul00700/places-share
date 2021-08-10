@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const placeRoutes = require('./routes/places-routes');
+const userRoutes = require('./routes/users-routes');
+
 const HttpError = require('./models/http-error');
 
 
@@ -12,6 +14,7 @@ const app = express();
 app.use(bodyParser.json()); // it will catch any json data and convert it to javascript data structures like object.
 
 app.use('/api/places', placeRoutes); // => /api/places/ ....
+app.use('/api/users', userRoutes);
 
 app.use((req, res, next) => {
     const error = new HttpError("Could not find this route", 404);
