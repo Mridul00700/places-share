@@ -1,5 +1,6 @@
 const { v4: uuid } = require('uuid');
 const HttpError = require('../models/http-error');
+const { validationResult } = require('express-validator');
 
 const Dummy_Users = [
     {
@@ -18,6 +19,13 @@ const getUsers = (req, res, next) => {
 }
 
 const signUp = (req, res, next) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log(errors);
+        throw new HttpError("Please check your name / email / password!");
+    }
+
     const { name, email, password } = req.body;
 
     const hasUser = Dummy_Users.find(user => user.email === email);
@@ -40,6 +48,7 @@ const signUp = (req, res, next) => {
 
 
 const login = (req, res, next) => {
+
     const { email, password } = req.body;
 
     const identifiedUser = Dummy_Users.find(user => user.email === email);
