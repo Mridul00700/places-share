@@ -20,6 +20,12 @@ const getUsers = (req, res, next) => {
 const signUp = (req, res, next) => {
     const { name, email, password } = req.body;
 
+    const hasUser = Dummy_Users.find(user => user.email === email);
+
+    if (hasUser) {
+        throw new HttpError("User already exists with this email id, try logging in!", 422);
+    }
+
     const newUser = {
         id: uuid(),
         name,
