@@ -1,2 +1,2 @@
-/node_modules
-/backend/util/location.js
+node_modules
+backend/util/location.js
