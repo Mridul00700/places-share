@@ -23,7 +23,7 @@ const signUp = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         console.log(errors);
-        throw new HttpError("Please check your name / email / password!");
+        throw new HttpError("Please check your name / email / password!", 422);
     }
 
     const { name, email, password } = req.body;
