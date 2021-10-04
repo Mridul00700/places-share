@@ -13,7 +13,6 @@ const Dummy_Users = [
 
 
 
-
 const getUsers = (req, res, next) => {
     res.json({ users: Dummy_Users });
 }
