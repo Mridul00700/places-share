@@ -2,7 +2,7 @@ const { v4: uuid } = require('uuid');
 const HttpError = require('../models/http-error');
 const { validationResult } = require('express-validator');
 const getCoordsForAddress = require('../util/location');
-
+const Place = require('../models/place');
 
 let DUMMY_PLACES = [
     {
@@ -58,16 +58,27 @@ createPlace = async (req, res, next) => {
         return next(error);
     }
 
-    const createdPlace = {
-        id: uuid(),
+    const createdPlace = new Place({
         title,
         description,
-        location: coordinates,
         address,
+        location: coordinates,
+        image: 'https://www.urbansplatter.com/wp-content/uploads/2014/07/Empire-State-Building-2013.jpg',
         creator
-    };
+    });
 
-    DUMMY_PLACES.push(createdPlace);   // unshift (createdPlace)
+
+
+    // DUMMY_PLACES.push(createdPlace);   // unshift (createdPlace)
+    try {
+        await createdPlace.save();
+    } catch (err) {
+        const error = new HttpError(
+            'Creating Place Failed, please try again',
+            500
+        );
+        return next(error)
+    }
     res.status(201).json({ place: createdPlace })  // Success for successfull post 
 
 };
