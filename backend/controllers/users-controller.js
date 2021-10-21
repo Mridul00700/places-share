@@ -2,6 +2,8 @@ const { v4: uuid } = require('uuid');
 const HttpError = require('../models/http-error');
 const { validationResult } = require('express-validator');
 
+const User = require('../models/user');
+
 const Dummy_Users = [
     {
         id: "u1",
@@ -27,11 +29,7 @@ const signUp = (req, res, next) => {
 
     const { name, email, password } = req.body;
 
-    const hasUser = Dummy_Users.find(user => user.email === email);
-
-    if (hasUser) {
-        throw new HttpError("User already exists with this email id, try logging in!", 422);
-    }
+    const existingUser = await User.findOne({ email: email })
 
     const newUser = {
         id: uuid(),
