@@ -1,0 +1,15 @@
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
+const Schema = mongoose.Schema;
+
+const usersSchema = new Schema({
+    userName: { type: String, required: true },
+    email: { type: String, required: true, unique: true },    // unique is true makes quering the email faster as we need email on frequent basis..
+    password: { type: String, required: true, minlength: 6 },
+    image: { type: String, required: true },
+    places: { type: String, required: true },
+});
+
+usersSchema.plugin(uniqueValidator);
+
+module.exports = mongoose.Model('User', usersSchema);

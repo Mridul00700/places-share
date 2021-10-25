@@ -19,7 +19,7 @@ const getUsers = (req, res, next) => {
     res.json({ users: Dummy_Users });
 }
 
-const signUp = (req, res, next) => {
+const signUp = async (req, res, next) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -29,7 +29,21 @@ const signUp = (req, res, next) => {
 
     const { name, email, password } = req.body;
 
-    const existingUser = await User.findOne({ email: email })
+    try {
+        const existingUser = await User.findOne({ email: email })
+    } catch (err) {
+        const error = new HttpError(
+            'Signing up failed, please try later!', 500
+        );
+        return next(error)
+    }
+
+    if (existingUser) {
+        const error = new HttpError(
+            'User already exists, try logging in!', 422
+        );
+        return next(error)
+    }
 
     const newUser = {
         id: uuid(),
