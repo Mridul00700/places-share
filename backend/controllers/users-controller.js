@@ -2,7 +2,7 @@ const { v4: uuid } = require('uuid');
 const HttpError = require('../models/http-error');
 const { validationResult } = require('express-validator');
 
-const User = require('../models/user');
+const User = require('../models/user');  // User Model
 
 const Dummy_Users = [
     {
@@ -42,19 +42,26 @@ const signUp = async (req, res, next) => {
         const error = new HttpError(
             'User already exists, try logging in!', 422
         );
-        return next(error)
+        return next(error);
     }
 
-    const newUser = {
-        id: uuid(),
+    const newUser = new User({
         name,
         email,
-        password
-    };
+        image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Greist_Building.JPG',
+        places
+    });
 
-    Dummy_Users.push(newUser);
+    try {
+        await newUser.save();
+    }
+    catch (err) {
+        const error = new HttpError(
+            'Something went wrong cannot sign up user!', 500
+        );
+    }
 
-    res.status(201).json({ user: newUser });
+    res.status(201).json({ user: newUser.toObject({ getters: true }) }); // getter : true remove the _id with id that mongo db creates by default
 }
 
 
