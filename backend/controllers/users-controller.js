@@ -4,20 +4,22 @@ const { validationResult } = require('express-validator');
 
 const User = require('../models/user');  // User Model
 
-const Dummy_Users = [
-    {
-        id: "u1",
-        name: "Mridul",
-        email: "test@test.com",
-        password: "tester"
+
+
+const getUsers = async (req, res, next) => {
+    let users;
+
+    try {
+        users = await User.find({}, '-password');
+    } catch (err) {
+        const error = new HttpError(
+            'Fetching users failed, please try again later!',
+            500
+        );
+        return next(error);
     }
-]
-
-
-
-const getUsers = (req, res, next) => {
-    res.json({ users: Dummy_Users });
-}
+    res.json({ users: users.map(user => user.toObject({ getters: true })) });
+};
 
 const signUp = async (req, res, next) => {
 
@@ -69,6 +71,7 @@ const signUp = async (req, res, next) => {
 
 const login = async (req, res, next) => {
 
+
     const { email, password } = req.body;
 
     let existingUser;
@@ -79,7 +82,7 @@ const login = async (req, res, next) => {
         const error = new HttpError(
             'Logging in failed, please try later!', 500
         );
-        return next(error)
+        return next(error);
     }
 
     if (!existingUser || existingUser.password !== password) {
