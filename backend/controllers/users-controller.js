@@ -29,7 +29,7 @@ const signUp = async (req, res, next) => {
         return next(new HttpError("Please check your name / email / password!", 422));
     }
 
-    const { name, email, password, places } = req.body;
+    const { name, email, password } = req.body;
     let existingUser;
     try {
         existingUser = await User.findOne({ email: email })
@@ -52,8 +52,9 @@ const signUp = async (req, res, next) => {
         email,
         image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Greist_Building.JPG',
         password,
-        places
+        places: []
     });
+    console.log(newUser);
 
     try {
         await newUser.save();

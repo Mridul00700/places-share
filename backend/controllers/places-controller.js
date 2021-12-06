@@ -82,7 +82,7 @@ createPlace = async (req, res, next) => {
         creator
     });
 
-
+    console.log('Create Place', createdPlace)
 
     // DUMMY_PLACES.push(createdPlace);   // unshift (createdPlace)
     try {
