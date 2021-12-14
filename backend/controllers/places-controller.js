@@ -6,6 +6,7 @@ const Place = require('../models/place');
 const User = require('../models/user');
 // const { Mongoose } = require('mongoose');
 const mongoose = require('mongoose');
+const user = require('../models/user');
 
 let DUMMY_PLACES = [
     {
@@ -45,9 +46,9 @@ getPlaceById = async (req, res, next) => {
 
 getPlacesByUserId = async (req, res, next) => {
     const userId = req.params.uid;
-    let places
+    // let places
     try {
-        places = await Place.find({ creator: userId })
+        userWithplaces = await User.findById(userId).populate('places');
     } catch (err) {
         const error = new HttpError(
             'Something went wrong!', 500
@@ -55,10 +56,10 @@ getPlacesByUserId = async (req, res, next) => {
         return next(error)
     }
 
-    if (!places || places.length === 0) {
+    if (!userWithplaces || userWithplaces.places.length === 0) {
         return next(new HttpError('Could not find a place for the provided id.', 404))
     }
-    res.json({ places: places.map(place => place.toObject({ getters: true })) });
+    res.json({ places: userWithplaces.places.map(place => place.toObject({ getters: true })) });
 }
 
 createPlace = async (req, res, next) => {
@@ -167,7 +168,7 @@ deletePlace = async (req, res, next) => {
     let place;
 
     try {
-        place = await Place.findById(placeId);
+        place = await Place.findById(placeId).populate('creator');
     } catch (err) {
         const error = new HttpError(
             'Something went wrong could not delete place', 500
@@ -175,8 +176,19 @@ deletePlace = async (req, res, next) => {
         return next(error);
     }
 
+    if (!place) {
+        const error = new HttpError('Could not find a place for this Id', 404);
+        return next(error);
+    }
+
+
     try {
-        await place.remove();
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        await place.remove({ session: session });
+        place.creator.places.pull(place);
+        await place.creator.save({ session: session });
+        await session.commitTransaction();
     } catch (err) {
         const error = new HttpError('Something went wrong could not delete place', 500
         );
