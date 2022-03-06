@@ -8,21 +8,6 @@ const User = require('../models/user');
 const mongoose = require('mongoose');
 const user = require('../models/user');
 
-let DUMMY_PLACES = [
-    {
-        id: 'p1',
-        title: 'Empire State Building',
-        description: 'one of the most famous sky scraper in the world',
-        location: {
-            lat: 40.748480,
-            lng: -73.985764
-        },
-        address: 'Empire State Building, New York, NY 10001, USA',
-        creator: 'u1'
-    }
-];
-
-
 
 getPlaceById = async (req, res, next) => {
     const placeId = req.params.pid;        //Holds and object provided by express.js {pid: 'p1'}
